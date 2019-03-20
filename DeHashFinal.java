@@ -1,0 +1,103 @@
+
+
+import java.security.NoSuchAlgorithmException;
+import java.security.MessageDigest;
+import java.util.Scanner;
+public class DeHash extends Thread implements Runnable{
+
+    private String hashed;
+    DeHash() {
+        Scanner input = new Scanner(System.in);
+
+        if (hashed == null){
+            System.out.println("Please Enter The Hashed Value:");
+            hashed = input.nextLine();
+              }
+
+    }
+
+    private boolean checker(String tString){
+        MessageDigest messageDigest;
+        try {
+            messageDigest = MessageDigest.getInstance("SHA-256");
+
+
+            if(tString != null)
+            messageDigest.update(tString.getBytes());
+            String sString = new String(messageDigest.digest());
+            if(sString.equals(hashed)){
+
+
+                return true;
+            }
+
+        }
+        catch(NoSuchAlgorithmException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    private void generator()
+    {
+
+           for(int i = 0; i <= 0xfffffff; i++)
+           {
+                
+               if(checker(i+""))
+               {
+                   System.out.println(i);
+                   break;
+               }
+
+           }
+
+
+    }
+    private void generatorBackWards()
+    {
+        for(int i = 0xffffffff; i < 1; i--)
+        {
+            if(checker(i+"") )
+            {
+                System.out.println(i);
+                break;
+            }
+        }
+    }
+    private DeHash(String input){
+    }
+    public void run() {
+            try {
+
+                DeHash x1 = new DeHash("");
+               DeHash x2 = new DeHash("");
+                x1.generator();
+                x2.generatorBackWards();
+                Thread threadX1 = new Thread(x1);
+               Thread threadX2 = new Thread(x2);
+                threadX1.start();
+                threadX2.start();
+                threadX1.join();
+                threadX2.join();
+
+
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+
+
+        }
+
+
+    public static void main(String[] args) {
+
+        DeHash u = new DeHash();
+        u.run();
+
+
+    }
+
+}
+
